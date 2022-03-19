@@ -14,7 +14,7 @@ router.get('/', getAllActor);
 
 router.get('/:id', getActorById);
 
-router.post('/', createActor);
+router.post('/', upload.single('profilePic'), createActor);
 
 router.patch('/:id', updateActor);
 

@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const { dataBase } = require('../util/database');
+const { database } = require('../util/database');
 
-const Movie = dataBase.define('movie', {
+const Movie = database.define('movie', {
   id: {
     primaryKey: true,
     autoIncrement: true,
@@ -19,11 +19,13 @@ const Movie = dataBase.define('movie', {
   },
   duration: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 0
   },
   rating: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 1
   },
   img: {
     type: DataTypes.STRING(255),

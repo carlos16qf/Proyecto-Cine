@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const { dataBase } = require('../util/database');
+const { database } = require('../util/database');
 
-const Actor = dataBase.define('actor', {
+const Actor = database.define('actor', {
   id: {
     primaryKey: true,
     autoIncrement: true,
@@ -14,20 +14,21 @@ const Actor = dataBase.define('actor', {
   },
   country: {
     type: DataTypes.STRING(100),
-    unique: true,
     allowNull: false
   },
   oscarsPrizez: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 0
   },
   rating: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 1
   },
   age: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: false
   },
   profilePic: {
     type: DataTypes.STRING(255),

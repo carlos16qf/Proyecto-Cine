@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const { dataBase } = require('../util/database');
+const { database } = require('../util/database');
 
-const Reviews = dataBase.define('review', {
+const Review = database.define('review', {
   id: {
     primaryKey: true,
     autoIncrement: true,
@@ -14,12 +14,12 @@ const Reviews = dataBase.define('review', {
   },
   Comment: {
     type: DataTypes.STRING(100),
-    unique: true,
     allowNull: false
   },
   rating: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 1
   },
   status: {
     type: DataTypes.STRING(10),
@@ -27,13 +27,13 @@ const Reviews = dataBase.define('review', {
     allowNull: false
   },
   userId: {
-    type: DataTypes.STRING(10),
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   movieId: {
-    type: DataTypes.STRING(10),
+    type: DataTypes.INTEGER,
     allowNull: false
   }
 });
 
-module.exports = { Reviews };
+module.exports = { Review };
