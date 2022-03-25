@@ -5,16 +5,26 @@ const {
   getUserById,
   createUsers,
   updateUsers,
-  deleteUsers
+  deleteUsers,
+  loginUser
 } = require('../controllers/user.controller');
+
+const {
+  validateSession,
+  protectAdmin
+} = require('../middlewares/auth.middlewares');
 
 const router = express.Router();
 
-router.get('/', getAllUsers);
+router.post('/', createUsers);
+
+router.post('/login', loginUser);
+
+router.use(validateSession);
+
+router.get('/', protectAdmin, getAllUsers);
 
 router.get('/:id', getUserById);
-
-router.post('/', createUsers);
 
 router.patch('/:id', updateUsers);
 

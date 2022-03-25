@@ -2,6 +2,7 @@ const { catchAsync } = require('../util/catchAsync');
 const { User } = require('../models/userModel');
 const { AppError } = require('../util/appError');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.findAll({
@@ -97,4 +98,36 @@ exports.deleteUsers = catchAsync(async (req, res, next) => {
   await user.update({ status: 'delete' });
 
   res.status(204).json({ status: 'success' });
+});
+
+exports.loginUser = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  // Find user given an email and has status active
+  const user = await User.findOne({
+    where: { email, status: 'active' }
+  });
+
+  // Compare entered password vs hashed password
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return next(new AppError(400, 'Credentials are invalid'));
+  }
+
+  // Create JWT
+  const token = await jwt.sign(
+    { id: user.id }, // Token payload
+    process.env.JWT_SECRET, // Secret key
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN
+    }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: { token }
+  });
+});
+
+exports.checkToken = catchAsync(async (req, res, next) => {
+  res.status(200).json({ status: 'success' });
 });

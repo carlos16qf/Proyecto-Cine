@@ -8,6 +8,8 @@ const {
   deleteActor
 } = require('../controllers/actor.controller');
 
+const { upload } = require('../util/multer');
+
 const router = express.Router();
 
 router.get('/', getAllActor);

@@ -8,7 +8,7 @@ const {
   deleteMovie
 } = require('../controllers/movie.controller');
 
-const {} = require('../util/multer');
+const { upload } = require('../util/multer');
 
 const router = express.Router();
 
