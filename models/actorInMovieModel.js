@@ -8,7 +8,7 @@ const ActorInMovie = database.define('actorInMovie', {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  userId: {
+  actorId: {
     type: DataTypes.INTEGER,
     allowNull: false
   },

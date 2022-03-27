@@ -1,20 +1,51 @@
 const { Actor } = require('../models/actorModel');
+const { ActorInMovie } = require('../models/actorInmovieModel');
+const { Movie } = require('../models/movieModel');
 
-//utils
+const { validationResult } = require('express-validator');
+
 const { catchAsync } = require('../util/catchAsync');
 const { AppError } = require('../util/appError');
 const { filterObj } = require('../util/filterObj');
-const { ref, uploadBytes } = require('firebase/storage');
+const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
 const { storage } = require('../util/firebase');
 
 exports.getAllActor = catchAsync(async (req, res, next) => {
   const actors = await Actor.findAll({
-    where: { status: 'active' }
+    where: { status: 'active' },
+    include: [{ model: Movie, through: ActorInMovie }]
   });
+  // const actorsPromises = actors.map(
+  //   async ({
+  //     id,
+  //     name,
+  //     country,
+  //     oscarsPrizez,
+  //     imgUrl,
+  //     rating,
+  //     age,
+  //     createdAt,
+  //     updatedAt
+  //   }) => {
+  //     const imgRef = ref(storage, imgUrl);
 
-  if (!actors) {
-    return next(new AppError(404, 'No actors found'));
-  }
+  //     const imgDownloadUrl = await getDownloadURL(imgRef);
+
+  //     return {
+  //       id,
+  //       name,
+  //       country,
+  //       oscarsPrizez,
+  //       imgUrl: imgDownloadUrl,
+  //       rating,
+  //       age,
+  //       createdAt,
+  //       updatedAt
+  //     };
+  //   }
+  // );
+
+  // const resolvedActors = await Promise.all(actorsPromises);
 
   res.status(200).json({
     status: 'success',
@@ -44,18 +75,19 @@ exports.getActorById = catchAsync(async (req, res, next) => {
 });
 
 exports.createActor = catchAsync(async (req, res, next) => {
-  const { name, country, oscarsPrizez, rating, profilePic, age } = req.body;
+  const { name, country, oscarsPrizez, rating, age } = req.body;
 
-  if (!name || !country || !oscarsPrizez || !rating || !profilePic || !age) {
-    return next(
-      new AppError(
-        400,
-        'Must provide a valid name, country, oscarsPrizez, rating, profilePic and age'
-      )
-    );
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const errorMsg = errors
+      .array()
+      .map(({ msg }) => msg)
+      .join('. ');
+    return next(new AppError(400, errorMsg));
   }
-
-  const imgRef = ref(storage, `imgs/${Date.now()}-${req.file.originalname}`);
+  const fileExtension = req.file.originalname.split('.')[1];
+  const imgRef = ref(storage, `imgs/${Date.now()}-${fileExtension}`);
 
   const result = await uploadBytes(imgRef, req.file.buffer);
 

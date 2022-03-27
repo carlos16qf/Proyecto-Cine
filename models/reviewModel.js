@@ -12,7 +12,7 @@ const Review = database.define('review', {
     type: DataTypes.STRING(100),
     allowNull: false
   },
-  Comment: {
+  comment: {
     type: DataTypes.STRING(100),
     allowNull: false
   },
