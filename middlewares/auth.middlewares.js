@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const { promisify } = require('util');
 
-const { User } = require('../models/usermodel');
+const { User } = require('../models/userModel');
 
 const { AppError } = require('../util/appError');
 const { catchAsync } = require('../util/catchAsync');
