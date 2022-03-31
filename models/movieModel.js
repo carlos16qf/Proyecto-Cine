@@ -14,7 +14,6 @@ const Movie = database.define('movie', {
   },
   description: {
     type: DataTypes.STRING(100),
-    unique: true,
     allowNull: false
   },
   duration: {

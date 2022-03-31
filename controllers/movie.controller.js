@@ -2,6 +2,7 @@ const { catchAsync } = require('../util/catchAsync');
 const { AppError } = require('../util/appError');
 const { ref, uploadBytes } = require('firebase/storage');
 const { storage } = require('../util/firebase');
+const { Email } = require('../util/email');
 
 const { Movie } = require('../models/movieModel');
 const { Actor } = require('../models/actorModel');
@@ -65,6 +66,18 @@ exports.createMovie = catchAsync(async (req, res, next) => {
   });
 
   await Promise.all(actorInMoviePromises);
+
+  const movieActors = await Actor.findAll({
+    include: [
+      {
+        model: Movie,
+        through: { where: { movieId: newMovie.id } }
+      }
+    ]
+  });
+
+  //!-In-a-real-app,-we-get-the-subscribed-emails-of-our-app-and-send-email-to-those-emails
+  new Email('luisarepizo1217@gmail.com').sendNewMovie(newMovie, movieActors);
 
   res.status(201).json({
     status: 'success',

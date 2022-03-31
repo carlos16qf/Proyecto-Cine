@@ -1,0 +1,11 @@
+extends baseEmail 
+
+block emailContent
+
+   p We have #{newMovie.title} available at our cimenas!
+
+   p In this movie, we hace actors like: 
+
+   ul 
+     each actor in movieActors 
+        li #{actor.name}

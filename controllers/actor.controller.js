@@ -15,42 +15,42 @@ exports.getAllActor = catchAsync(async (req, res, next) => {
     where: { status: 'active' },
     include: [{ model: Movie, through: ActorInMovie }]
   });
-  // const actorsPromises = actors.map(
-  //   async ({
-  //     id,
-  //     name,
-  //     country,
-  //     oscarsPrizez,
-  //     imgUrl,
-  //     rating,
-  //     age,
-  //     createdAt,
-  //     updatedAt
-  //   }) => {
-  //     const imgRef = ref(storage, imgUrl);
+  const actorsPromises = actors.map(
+    async ({
+      id,
+      name,
+      country,
+      oscarsPrizez,
+      profilePic,
+      rating,
+      age,
+      createdAt,
+      updatedAt
+    }) => {
+      const imgRef = ref(storage, profilePic);
 
-  //     const imgDownloadUrl = await getDownloadURL(imgRef);
+      const imgDownloadUrl = await getDownloadURL(imgRef);
 
-  //     return {
-  //       id,
-  //       name,
-  //       country,
-  //       oscarsPrizez,
-  //       imgUrl: imgDownloadUrl,
-  //       rating,
-  //       age,
-  //       createdAt,
-  //       updatedAt
-  //     };
-  //   }
-  // );
+      return {
+        id,
+        name,
+        country,
+        oscarsPrizez,
+        profilePic: imgDownloadUrl,
+        rating,
+        age,
+        createdAt,
+        updatedAt
+      };
+    }
+  );
 
-  // const resolvedActors = await Promise.all(actorsPromises);
+  const resolvedActors = await Promise.all(actorsPromises);
 
   res.status(200).json({
     status: 'success',
     data: {
-      actors
+      actors: resolvedActors
     }
   });
 });

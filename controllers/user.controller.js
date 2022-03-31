@@ -3,6 +3,7 @@ const { User } = require('../models/userModel');
 const { AppError } = require('../util/appError');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { Email } = require('../util/email');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.findAll({
@@ -61,6 +62,8 @@ exports.createUsers = catchAsync(async (req, res, next) => {
   });
 
   newUser.password = undefined;
+
+  await new Email(email).sendWelcome(name);
 
   res.status(201).json({
     status: 'success',
