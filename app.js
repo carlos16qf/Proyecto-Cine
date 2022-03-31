@@ -40,6 +40,3 @@ app.use('/api/v1/reviews', reviewRouter);
 app.use(globalErrorHandler);
 
 module.exports = { app };
-
-const secret = bcrypt.genSalt(64).isString('hex');
-console.log(secret);
