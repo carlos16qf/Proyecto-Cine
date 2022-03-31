@@ -1,5 +1,5 @@
 const { Actor } = require('../models/actorModel');
-const { ActorInMovie } = require('../models/actorInmovieModel');
+const { ActorInMovie } = require('../models/actorInMovieModel');
 const { Movie } = require('../models/movieModel');
 
 const { validationResult } = require('express-validator');
