@@ -8,7 +8,7 @@ const { Movie } = require('../models/movieModel');
 const { Actor } = require('../models/actorModel');
 const { ActorInMovie } = require('../models/actorInMovieModel');
 const { Review } = require('../models/reviewModel');
-const { User } = require('../models/usermodel');
+const { User } = require('../models/userModel');
 
 exports.getAllMovie = catchAsync(async (req, res, next) => {
   const movies = await Movie.findAll({
